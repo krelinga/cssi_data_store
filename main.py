@@ -80,10 +80,27 @@ class DeleteCats(webapp2.RequestHandler):
         # the list of dogs.
         self.redirect('/')
 
+class FilterHandler(webapp2.RequestHandler):
+    def get(self):
+        selection = self.request.get("cat_selection")
+        cats = []
+
+        if selection == "all" or selection == "":
+            cats = Cat.query(ancestor=root_parent()).fetch()
+        elif selection == "sleepy":
+            cats = Cat.query(Cat.sleepy == True)
+        else:
+            cats = Cat.query(Cat.sleepy == False)
+
+        template = JINJA_ENVIRONMENT.get_template("templates/filter.html")
+        self.response.write(template.render({"cats": cats}))
+
+
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/new_cats', NewCatsHandler),
     ('/delete_dogs', DeleteDogs),
     ('/delete_cats', DeleteCats),
+    ('/filter', FilterHandler)
 ], debug=True)

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Filter Cats and Dogs</title>
+  </head>
+  <body>
+    <h1> Filter Cats!</h1>
+    <form method="get">
+      <select name="cat_selection">
+        <option value="sleepy">Sleepy Cats</option>
+        <option value="awake">Not Sleepy Cats</option>
+        <option value="all">All Cats</option>
+      </select>
+      <input type="submit" name="" value="Filter">
+    </form>
+
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Favorite Food</th>
+        <th>Sleepy?</th>
+        <th>Delete?</th>
+      </tr>
+      {% for cat in cats %}
+      <tr>
+        <td>{{cat.name}}</td>
+        <td>{{cat.favorite_food}}</td>
+        <td>
+          {%if cat.sleepy %}
+          Yes
+          {% else %}
+          No
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>
