@@ -22,12 +22,18 @@ class Dog(ndb.Model):
     kind = ndb.StringProperty()
     hungry = ndb.BooleanProperty()
 
+class Cat(ndb.Model):
+    name = ndb.StringProperty()
+    favorite_food = ndb.StringProperty()
+    sleepy = ndb.BooleanProperty()
+
 class MainPage(webapp2.RequestHandler):
     '''The handler for displaying the main list of dogs, and for adding new dogs.'''
     def get(self):
         template = JINJA_ENVIRONMENT.get_template("templates/main.html")
         data = {
-            'dogs': Dog.query(ancestor=root_parent()).fetch()
+            'dogs': Dog.query(ancestor=root_parent()).fetch(),
+            'cats': Cat.query(ancestor=root_parent()).fetch()
         }
         self.response.write(template.render(data))
 
@@ -52,8 +58,32 @@ class DeleteDogs(webapp2.RequestHandler):
         # the list of dogs.
         self.redirect('/')
 
+class NewCatsHandler(webapp2.RequestHandler):
+    def post(self):
+        new_cat = Cat(parent=root_parent())
+        new_cat.name = self.request.get('cat_name')
+        new_cat.favorite_food = self.request.get('cat_favorite_food')
+        new_cat.sleepy = bool(self.request.get('cat_sleepy', default_value=''))
+        new_cat.put()
+        # redirect to '/' so that the get() version of this handler will run
+        # and show the list of dogs.
+        self.redirect('/')
+
+class DeleteCats(webapp2.RequestHandler):
+    '''The handler for deleting cats.'''
+    def post(self):
+        to_delete = self.request.get('to_delete', allow_multiple=True)
+        for entry in to_delete:
+            key = ndb.Key(urlsafe=entry)
+            key.delete()
+        # redirect to '/' so that the MainPage.get() handler will run and show
+        # the list of dogs.
+        self.redirect('/')
+
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
+    ('/new_cats', NewCatsHandler),
     ('/delete_dogs', DeleteDogs),
+    ('/delete_cats', DeleteCats),
 ], debug=True)
