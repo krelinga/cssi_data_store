@@ -88,9 +88,9 @@ class FilterHandler(webapp2.RequestHandler):
         if selection == "all" or selection == "":
             cats = Cat.query(ancestor=root_parent()).fetch()
         elif selection == "sleepy":
-            cats = Cat.query(Cat.sleepy == True)
+            cats = Cat.query(Cat.sleepy == True, ancestor=root_parent())
         else:
-            cats = Cat.query(Cat.sleepy == False)
+            cats = Cat.query(Cat.sleepy == False, ancestor=root_parent())
 
         template = JINJA_ENVIRONMENT.get_template("templates/filter.html")
         self.response.write(template.render({"cats": cats}))
