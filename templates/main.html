@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dogs!</title>
+  </head>
+  <body>
+    <h1>New Dog</h1>
+    <form method="post">
+      <div>
+        Name: <input type="text" name="dog_name" value="">
+      </div>
+      <div>
+        Kind: <input type="text" name="dog_kind" value="">
+      </div>
+      <div>
+        Hungry? <input type="checkbox" name="dog_hungry" value="True">
+      </div>
+      <input type="submit" name="" value="Submit">
+    </form>
+    <h1>Existing Dogs</h1>
+    <form class="" action="/delete_dogs" method="post">
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Kind</th>
+          <th>Hungry?</th>
+          <th>Delete?</th>
+        </tr>
+        {% for dog in dogs %}
+        <tr>
+          <td>{{dog.name}}</td>
+          <td>{{dog.kind}}</td>
+          <td>
+            {%if dog.hungry %}
+            Yes
+            {% else %}
+            No
+            {% endif %}
+          </td>
+          <td><input type="checkbox" name="to_delete" value="{{dog.key.urlsafe()}}"></td>
+        </tr>
+        {% endfor %}
+      </table>
+      <input type="submit" name="" value="Delete Selected">
+    </form>
+  </body>
+</html>
