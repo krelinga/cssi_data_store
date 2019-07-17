@@ -32,7 +32,6 @@ class MainPage(webapp2.RequestHandler):
         self.response.write(template.render(data))
 
     def post(self):
-        print(self.request)
         new_dog = Dog(parent=root_parent())
         new_dog.name = self.request.get('dog_name')
         new_dog.kind = self.request.get('dog_kind')
