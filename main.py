@@ -88,11 +88,11 @@ class FilterHandler(webapp2.RequestHandler):
         if selection == "all" or selection == "":
             cats = Cat.query(ancestor=root_parent()).fetch()
         elif selection == "sleepy":
-            cats = Cat.query(Cat.sleepy == True)
+            cats = Cat.query(Cat.sleepy == True, ancestor=root_parent()).fetch()
         elif selection == "pizza":
-            cats = Cat.query(Cat.favorite_food == "pizza")
+            cats = Cat.query(Cat.favorite_food == "pizza", ancestor=root_parent()).fetch()
         elif selection == "nopizza":
-            cats = Cat.query(Cat.favorite_food != "pizza")
+            cats = Cat.query(Cat.favorite_food != "pizza", ancestor=root_parent()).fetch()
         else:
             cats = Cat.query(Cat.sleepy == False, ancestor=root_parent())
 
