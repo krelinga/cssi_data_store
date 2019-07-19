@@ -89,6 +89,10 @@ class FilterHandler(webapp2.RequestHandler):
             cats = Cat.query(ancestor=root_parent()).fetch()
         elif selection == "sleepy":
             cats = Cat.query(Cat.sleepy == True)
+        elif selection == "pizza":
+            cats = Cat.query(Cat.favorite_food == "pizza")
+        elif selection == "nopizza":
+            cats = Cat.query(Cat.favorite_food != "pizza")
         else:
             cats = Cat.query(Cat.sleepy == False)
 
